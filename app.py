@@ -96,7 +96,7 @@ if uploaded_file:
     else:
         df = pd.read_excel(uploaded_file)
 
-    st.subheader("📄 Raw Data Preview")
+    st.subheader("Raw Data Preview")
     st.dataframe(df.head())
 
     # Convert timestamps
@@ -106,7 +106,7 @@ if uploaded_file:
     # Expand room nights
     expanded_df = expand_to_room_nights(df)
 
-    st.subheader("🛏️ Expanded Room Nights Data")
+    st.subheader("Expanded Room Nights Data")
     st.dataframe(expanded_df.head())
 
     room_types = sorted(expanded_df["room_type"].dropna().unique().tolist())
@@ -159,7 +159,7 @@ if uploaded_file:
                     "Average Forecast Revenue": np.mean(future_rev)
                 })
 
-        st.success("✅ Forecast completed for all room types!")
+        st.success("Forecast completed for all room types!")
 
         # Sidebar dropdown for room selection
         selected_room = st.sidebar.selectbox("Select Room Type to Visualize Forecast", room_types)
@@ -184,7 +184,7 @@ if uploaded_file:
             # --------------------------------------------------------------------
             # MAIN FORECAST GRAPH
             # --------------------------------------------------------------------
-            st.subheader(f"📈 Forecast for Room Type: {selected_room}")
+            st.subheader(f"Forecast for Room Type: {selected_room}")
 
             fig, ax1 = plt.subplots(figsize=(10, 5))
             ax1.plot(combined["date"], combined["actual_revenue"], label="Actual Revenue", color="blue")
@@ -197,7 +197,7 @@ if uploaded_file:
             ax2.set_ylabel("Occupancy (%)", color="green")
             st.pyplot(fig)
 
-            st.write("🔍 Forecast Data Preview:")
+            st.write("Forecast Data Preview:")
             st.dataframe(combined.tail())
 
             # --------------------------------------------------------------------
@@ -205,7 +205,7 @@ if uploaded_file:
             # --------------------------------------------------------------------
 
             # 1. BAR CHART: Actual vs Forecast Revenue
-            st.subheader("📊 Bar Chart: Actual vs Forecast Revenue")
+            st.subheader("Bar Chart: Actual vs Forecast Revenue")
             bar_df = pd.concat([
                 hist[["date", "revenue"]].rename(columns={"revenue": "value"}).assign(type="Actual"),
                 fc[["date", "forecast_revenue"]].rename(columns={"forecast_revenue": "value"}).assign(type="Forecast")
@@ -214,7 +214,7 @@ if uploaded_file:
             st.plotly_chart(fig_bar, use_container_width=True)
 
             # 2. AREA CHART: Occupancy Trend
-            st.subheader("📈 Area Chart: Occupancy Trend")
+            st.subheader("Area Chart: Occupancy Trend")
             area_df = pd.concat([
                 hist[["date", "occupancy_rate"]].rename(columns={"occupancy_rate": "value"}).assign(type="Actual"),
                 fc[["date", "forecast_occupancy(%)"]].rename(columns={"forecast_occupancy(%)": "value"}).assign(type="Forecast")
@@ -223,7 +223,7 @@ if uploaded_file:
             st.plotly_chart(fig_area, use_container_width=True)
 
             # 3. DUAL AXIS: Revenue vs Nights
-            st.subheader("🔀 Dual Axis: Revenue vs Nights")
+            st.subheader("Dual Axis: Revenue vs Nights")
             fig_dn, ax1 = plt.subplots(figsize=(10, 5))
             ax1.plot(combined["date"], combined["actual_revenue"], color="blue", label="Actual Revenue")
             ax1.plot(combined["date"], combined["forecast_revenue"], color="cyan", linestyle="--", label="Forecast Revenue")
@@ -236,7 +236,7 @@ if uploaded_file:
             st.pyplot(fig_dn)
 
             # 4. HEATMAP: Occupancy Calendar
-            st.subheader("🔥 Occupancy Heatmap")
+            st.subheader("Occupancy Heatmap")
             heat_df = combined.copy()
             heat_df["day"] = heat_df["date"].dt.day
             heat_df["month"] = heat_df["date"].dt.month
@@ -248,7 +248,7 @@ if uploaded_file:
             st.plotly_chart(fig_heat, use_container_width=True)
 
             # 5. SCATTER PLOT: Revenue vs Occupancy
-            st.subheader("🎯 Scatter: Revenue vs Occupancy")
+            st.subheader("Scatter: Revenue vs Occupancy")
             scatter_df = combined.copy()
             fig_scatter = px.scatter(
                 scatter_df,
@@ -260,7 +260,7 @@ if uploaded_file:
 
         # Summary section
         summary_df = pd.DataFrame(summary_data)
-        st.subheader("📊 Forecast Summary for All Room Types")
+        st.subheader("Forecast Summary for All Room Types")
         st.dataframe(summary_df)
 
         # Download button
@@ -272,7 +272,7 @@ if uploaded_file:
                 data_dict["forecast"].to_excel(writer, index=False, sheet_name=f"{room[:28]}_Forecast")
 
         st.download_button(
-            label="⬇️ Download All Room Forecasts (Excel)",
+            label="⬇ Download All Room Forecasts (Excel)",
             data=output.getvalue(),
             file_name="hotel_room_forecasts.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
